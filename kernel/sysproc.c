@@ -93,7 +93,8 @@ sys_uptime(void)
   return xticks;
 }
 
-
+// defining custom syscall
+// this syscall's function is to print a pre defined message
 uint64 sys_trigger(void)
 {
   log_message(0,"This is a log to test a new xv6 system call");

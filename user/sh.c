@@ -76,38 +76,41 @@ runcmd(struct cmd *cmd)
     ecmd = (struct execcmd*)cmd;
     if(ecmd->argv[0] == 0)
       exit(1);
-    if(ecmd->argv[0] && strcmp(ecmd->argv[0],"!")==0){
+    //  command for ! to print a arbitrary meesage
+    // any os substring will be printed in blue color
+    // if the message exeedes 512 charecters, an error will be printed instead
+    if(ecmd->argv[0] && strcmp(ecmd->argv[0],"!")==0){ // check the first arg for !
       int count=0;
       int c=0;
-      for(int i=1;ecmd->argv[i]!=0;i++)
+      for(int i=1;ecmd->argv[i]!=0;i++) // counting charecters
       {
         count++;
         c+=strlen(ecmd->argv[i]);
       }
-      if(c>512)
+      if(c>512) // checking whether if charecter count exeedes 512
       {
-        write(1,"Message too long\n",17);
+        write(1,"Message too long\n",17); // error message
       }
       else{
-        for(int i=1;i<=count;i++)
+        for(int i=1;i<=count;i++) // printing the message
         {
-          if(strcmp(ecmd->argv[i],"os")==0)
+          if(strcmp(ecmd->argv[i],"os")==0) // checking for os substring
           {
-            write(1, "\033[34m", 5);
+            write(1, "\033[34m", 5); // changing color to blue
             write(1,ecmd->argv[i],strlen(ecmd->argv[i]));
-            write(1, "\033[0m", 4);
+            write(1, "\033[0m", 4); // reverting back to white
           }
-          else{
+          else{ // printing the rest of the message
           write(1,ecmd->argv[i],strlen(ecmd->argv[i]));
           }
-          if(i + 1 <= count){
+          if(i + 1 <= count){ // adding space between every word
             write(1, " ", 1);
-          } else {
+          } else { // going to a new line after printing
             write(1, "\n", 1);
           }
         }
       }
-      exit(0);
+      exit(0); // exiting with code 0 
     }
     exec(ecmd->argv[0], ecmd->argv);
     fprintf(2, "exec %s failed\n", ecmd->argv[0]);
@@ -167,7 +170,7 @@ runcmd(struct cmd *cmd)
 int
 getcmd(char *buf, int nbuf)
 {
-  write(2, "$bardia-mardani ", 17);
+  write(2, "$bardia-mardani ", 17); // changing default bash sign to group name
   memset(buf, 0, nbuf);
   gets(buf, nbuf);
   if(buf[0] == 0) // EOF
