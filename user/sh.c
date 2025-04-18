@@ -76,6 +76,39 @@ runcmd(struct cmd *cmd)
     ecmd = (struct execcmd*)cmd;
     if(ecmd->argv[0] == 0)
       exit(1);
+    if(ecmd->argv[0] && strcmp(ecmd->argv[0],"!")==0){
+      int count=0;
+      int c=0;
+      for(int i=1;ecmd->argv[i]!=0;i++)
+      {
+        count++;
+        c+=strlen(ecmd->argv[i]);
+      }
+      if(c>512)
+      {
+        write(1,"Message too long\n",17);
+      }
+      else{
+        for(int i=1;i<=count;i++)
+        {
+          if(strcmp(ecmd->argv[i],"os")==0)
+          {
+            write(1, "\033[34m", 5);
+            write(1,ecmd->argv[i],strlen(ecmd->argv[i]));
+            write(1, "\033[0m", 4);
+          }
+          else{
+          write(1,ecmd->argv[i],strlen(ecmd->argv[i]));
+          }
+          if(i + 1 <= count){
+            write(1, " ", 1);
+          } else {
+            write(1, "\n", 1);
+          }
+        }
+      }
+      exit(0);
+    }
     exec(ecmd->argv[0], ecmd->argv);
     fprintf(2, "exec %s failed\n", ecmd->argv[0]);
     break;
@@ -134,7 +167,7 @@ runcmd(struct cmd *cmd)
 int
 getcmd(char *buf, int nbuf)
 {
-  write(2, "$ ", 2);
+  write(2, "$bardia-mardani ", 17);
   memset(buf, 0, nbuf);
   gets(buf, nbuf);
   if(buf[0] == 0) // EOF
