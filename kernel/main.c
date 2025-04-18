@@ -3,7 +3,7 @@
 #include "memlayout.h"
 #include "riscv.h"
 #include "defs.h"
-#include "custom_logger.h"
+#include "custom_logger.h" // adding custom logger to the file
 
 volatile static int started = 0;
 
@@ -32,6 +32,7 @@ main()
     userinit();      // first user process
     __sync_synchronize();
     started = 1;
+    // logging a message with custom logger as the os starts
     log_message(0,"Welcome to AUT MCS Principles of Operating Systems Course.This message is from a custom logger implemented by 40213430 and 40213432");
     log_message(1,"This is a test warning message for the custom logger");
     log_message(2,"This is a test error message for the custom logger");

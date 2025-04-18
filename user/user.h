@@ -22,7 +22,7 @@ int getpid(void);
 char* sbrk(int);
 int sleep(int);
 int uptime(void);
-int trigger(void);
+int trigger(void); // defined custom syscall
 
 // ulib.c
 int stat(const char*, struct stat*);
