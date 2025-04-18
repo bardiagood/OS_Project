@@ -36,4 +36,4 @@ entry("getpid");
 entry("sbrk");
 entry("sleep");
 entry("uptime");
-entry("trigger"); #added entry for custom syscall
+entry("trigger"); 
