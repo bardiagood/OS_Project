@@ -13,7 +13,7 @@ sys_exit(void)
   int n;
   argint(0, &n);
   exit(n);
-  return 0;  // not reached
+  return 0; // not reached
 }
 
 uint64
@@ -44,7 +44,7 @@ sys_sbrk(void)
 
   argint(0, &n);
   addr = myproc()->sz;
-  if(growproc(n) < 0)
+  if (growproc(n) < 0)
     return -1;
   return addr;
 }
@@ -56,12 +56,14 @@ sys_sleep(void)
   uint ticks0;
 
   argint(0, &n);
-  if(n < 0)
+  if (n < 0)
     n = 0;
   acquire(&tickslock);
   ticks0 = ticks;
-  while(ticks - ticks0 < n){
-    if(killed(myproc())){
+  while (ticks - ticks0 < n)
+  {
+    if (killed(myproc()))
+    {
       release(&tickslock);
       return -1;
     }
@@ -97,6 +99,25 @@ sys_uptime(void)
 // this syscall's function is to print a pre defined message
 uint64 sys_trigger(void)
 {
-  log_message(0,"This is a log to test a new xv6 system call");
+  log_message(0, "This is a log to test a new xv6 system call");
   return 1;
+}
+
+// kernel thread syscall kernel defintion
+uint64 sys_thread(void)
+{
+  uint64 start_thread, stack_address, arg;
+  argaddr(0, &start_thread);
+  argaddr(1, &stack_address);
+  argaddr(2, &arg);
+  struct thread *t = allocthread(start_thread, stack_address, arg);
+  return t ? t->id : 0;
+}
+
+// join thread syscall kernel definition
+uint64 sys_jointhread(void)
+{
+  int id;
+  argint(0, &id);
+  return jointhread(id);
 }
